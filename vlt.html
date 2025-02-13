@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <!-- Thêm meta viewport để đảm bảo trang không bị thu nhỏ trên điện thoại -->
+  <!-- Meta viewport để kiểm soát cách hiển thị trên điện thoại -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Envelope with Heart Rain</title>
   <!-- Font chữ dễ thương -->
@@ -17,13 +17,13 @@
       position: relative;
       overflow: hidden;
     }
-    /* Tiêu đề: phóng to 3 lần, căn giữa và đặt cao hơn */
+    /* Tiêu đề: luôn hiển thị lớn */
     h1 {
       position: absolute;
-      top: 60px; /* Nâng tiêu đề lên */
+      top: 60px; /* Đặt tiêu đề cao trên trang */
       left: 50%;
       transform: translateX(-50%);
-      font-size: 50px;
+      font-size: 72px;  /* Kích thước cố định 72px, bạn cũng có thể dùng 10vw nếu muốn */
       color: #d55;
       margin: 0;
       z-index: 1000;
@@ -31,7 +31,7 @@
     /* Container định vị phong thư và nút bấm */
     .container {
       position: absolute;
-      top: 280px;  /* Điều chỉnh vị trí cụ thể theo nhu cầu */
+      top: 300px;  /* Điều chỉnh khoảng cách từ trên xuống để không bị che bởi tiêu đề */
       left: 50%;
       transform: translateX(-50%);
       text-align: center;
@@ -142,14 +142,6 @@
         opacity: 0;
       }
     }
-    /* Nếu bạn muốn điều chỉnh layout cho màn hình nhỏ, bạn có thể thêm media query.
-       Tuy nhiên, nếu bạn muốn chữ h1 luôn lớn (72px) thì hãy đảm bảo không giảm kích thước trong media query. */
-    @media (max-width: 900px) {
-      /* Nếu cần, bạn có thể điều chỉnh vị trí container để phù hợp hơn */
-      .container {
-        top: 290px;
-      }
-    }
   </style>
 </head>
 <body>
@@ -158,8 +150,7 @@
   <div class="container">
     <!-- Phong thư -->
     <div class="envelope" id="envelope">
-      <!-- SVG tạo tam giác nắp thư:
-           Hai đỉnh tại (0,0) và (300,0), đỉnh dưới tại (150,100) -->
+      <!-- SVG tạo tam giác nắp thư: Hai đỉnh tại (0,0) và (300,0), đỉnh dưới tại (150,100) -->
       <svg viewBox="0 0 300 200" class="flap">
         <path d="M0,0 L300,0 L150,100 Z" />
       </svg>

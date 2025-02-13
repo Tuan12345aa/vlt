@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Envelope with Heart Rain</title>
+  <!-- Font chữ dễ thương -->
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+  <style>
+    /* Cài đặt chung cho toàn trang */
+    body {
+      margin: 0;
+      padding: 0;
+      background: #ffeef1;
+      font-family: 'Pacifico', cursive;
+      position: relative;
+      overflow: hidden;
+    }
+    /* Tiêu đề: phóng to 3 lần, căn giữa và đặt cao hơn */
+    h1 {
+      position: absolute;
+      top: 75px; /* Nâng tiêu đề lên */
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 72px;
+      color: #d55;
+      margin: 0;
+      z-index: 1000;
+    }
+    /* Container định vị phong thư và nút bấm */
+    .container {
+      position: absolute;
+      top: 280px;  /* Điều chỉnh vị trí cụ thể theo nhu cầu */
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+    }
+    /* -------- PHONG THƯ (hình chữ nhật bo góc) -------- */
+    .envelope {
+      position: relative;
+      width: 300px;
+      height: 200px;
+      background: #ffcdd2;       /* Màu nền hồng nhạt */
+      border: 2px solid #f06292;  /* Viền của phong thư */
+      border-radius: 20px;        /* Bo tròn các góc */
+      box-sizing: border-box;
+      overflow: hidden;
+      z-index: 10;
+    }
+    /* -------- FLAP (tam giác nắp thư) -------- */
+    .flap {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 300px;
+      height: 200px;
+      z-index: 2;                 /* Đặt trên lá thư */
+      pointer-events: none;       /* Không can thiệp sự kiện chuột */
+      transition: opacity 0.8s;   /* Hiệu ứng mờ dần khi mở */
+    }
+    .flap path {
+      fill: #f06292;
+      stroke: #f06292;
+      stroke-width: 2;
+      stroke-linejoin: round;
+    }
+    /* -------- LÁ THƯ BÊN TRONG -------- */
+    .letter {
+      position: absolute;
+      width: 240px;
+      height: 100px;
+      top: 50px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #fff;
+      border: 2px solid #f06292;
+      border-radius: 4px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.2);
+      text-align: center;
+      padding: 10px;
+      box-sizing: border-box;
+      opacity: 0;                 /* Ẩn lúc đầu */
+      transition: transform 0.8s, opacity 0.8s;
+      z-index: 1;                 /* Nằm dưới flap */
+    }
+    .letter p {
+      margin: 10px 0;
+      color: #d55;
+      font-size: 1.2rem;
+    }
+    /* Khi mở phong thư (thêm class .open) */
+    .envelope.open .letter {
+      opacity: 1;
+      transform: translate(-50%, -10px);
+    }
+    .envelope.open .flap {
+      opacity: 0; /* Tam giác mờ dần và biến mất */
+    }
+    /* -------- NÚT BẤM -------- */
+    .buttons {
+      margin-top: 20px;
+      z-index: 100;
+    }
+    button {
+      background: #f06292;
+      border: none;
+      color: #fff;
+      padding: 10px 20px;
+      margin: 0 5px;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background: #ec407a;
+    }
+    /* -------- CONTAINER TRÁI TIM RỚI XUỐNG -------- */
+    #heartContainer {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 999;
+    }
+    /* Các trái tim rơi */
+    .falling-heart {
+      position: absolute;
+      opacity: 0.8;
+      animation: fall linear;
+    }
+    @keyframes fall {
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>Valentine Envelope</h1>
+
+  <div class="container">
+    <!-- Phong thư -->
+    <div class="envelope" id="envelope">
+      <!-- SVG tạo tam giác nắp thư:
+           Hai đỉnh tại (0,0) và (300,0), đỉnh dưới tại (150,100) -->
+      <svg viewBox="0 0 300 200" class="flap">
+        <path d="M0,0 L300,0 L150,100 Z" />
+      </svg>
+
+      <!-- Lá thư ẩn bên trong -->
+      <div class="letter">
+        <p>I love you, most ardently!</p>
+      </div>
+    </div>
+
+    <!-- Nút bấm mở/đóng -->
+    <div class="buttons">
+      <button id="openBtn">Open Envelope</button>
+      <button id="closeBtn">Close Envelope</button>
+    </div>
+  </div>
+
+  <!-- Container cho trái tim rơi -->
+  <div id="heartContainer"></div>
+
+  <script>
+    const envelope = document.getElementById("envelope");
+    const openBtn = document.getElementById("openBtn");
+    const closeBtn = document.getElementById("closeBtn");
+    const heartContainer = document.getElementById("heartContainer");
+    let heartInterval;
+    
+    // Hàm tạo 1 trái tim rơi
+    function createHeart() {
+      const heart = document.createElement('div');
+      heart.classList.add('falling-heart');
+      heart.innerHTML = `<svg viewBox="0 0 24 24" fill="#f06292" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5
+                 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09
+                 C13.09 3.81 14.76 3 16.5 3
+                 19.58 3 22 5.42 22 8.5
+                 c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+      </svg>`;
+      const size = Math.random() * 30 + 10;
+      heart.style.width = `${size}px`;
+      heart.style.height = `${size}px`;
+      heart.style.left = `${Math.random() * 100}%`;
+      heart.style.top = `-${size}px`;
+      const duration = Math.random() * 3 + 3;
+      heart.style.animationDuration = `${duration}s`;
+      heartContainer.appendChild(heart);
+      setTimeout(() => {
+        heart.remove();
+      }, duration * 1000);
+    }
+    
+    openBtn.addEventListener("click", () => {
+      envelope.classList.add("open");
+      heartInterval = setInterval(createHeart, 300);
+      setTimeout(() => {
+        clearInterval(heartInterval);
+      }, 5000);
+    });
+    
+    closeBtn.addEventListener("click", () => {
+      envelope.classList.remove("open");
+      clearInterval(heartInterval);
+    });
+  </script>
+</body>
+</html>

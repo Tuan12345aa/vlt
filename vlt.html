@@ -18,7 +18,7 @@
     /* Tiêu đề: phóng to 3 lần, căn giữa và đặt cao hơn */
     h1 {
       position: absolute;
-      top: 75px; /* Nâng tiêu đề lên */
+      top: 90px; /* Nâng tiêu đề lên */
       left: 50%;
       transform: translateX(-50%);
       font-size: 72px;
@@ -29,7 +29,7 @@
     /* Container định vị phong thư và nút bấm */
     .container {
       position: absolute;
-      top: 280px;  /* Điều chỉnh vị trí cụ thể theo nhu cầu */
+      top: 290px;  /* Điều chỉnh vị trí cụ thể theo nhu cầu */
       left: 50%;
       transform: translateX(-50%);
       text-align: center;
@@ -140,6 +140,16 @@
         opacity: 0;
       }
     }
+    /* CSS Media Query cho màn hình nhỏ */
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 40px;  /* Giảm kích thước chữ trên điện thoại */
+        top: 30px;        /* Nâng tiêu đề cao hơn so với giao diện điện thoại */
+      }
+      .container {
+        top: 200px;       /* Dịch container xuống để tạo khoảng trống cho tiêu đề */
+      }
+    }
   </style>
 </head>
 <body>
@@ -148,8 +158,7 @@
   <div class="container">
     <!-- Phong thư -->
     <div class="envelope" id="envelope">
-      <!-- SVG tạo tam giác nắp thư:
-           Hai đỉnh tại (0,0) và (300,0), đỉnh dưới tại (150,100) -->
+      <!-- SVG tạo tam giác nắp thư: Hai đỉnh tại (0,0) và (300,0), đỉnh dưới tại (150,100) -->
       <svg viewBox="0 0 300 200" class="flap">
         <path d="M0,0 L300,0 L150,100 Z" />
       </svg>

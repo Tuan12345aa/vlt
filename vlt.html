@@ -2,9 +2,9 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
+  <!-- Thêm meta viewport để đảm bảo trang không bị thu nhỏ trên điện thoại -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Envelope with Heart Rain</title>
-  <!-- Thêm meta viewport để hiển thị đúng trên điện thoại -->
-  <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- Font chữ dễ thương -->
   <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
   <style>
@@ -20,7 +20,7 @@
     /* Tiêu đề: phóng to 3 lần, căn giữa và đặt cao hơn */
     h1 {
       position: absolute;
-      top: 90px; /* Vị trí trên màn hình */
+      top: 90px; /* Nâng tiêu đề lên */
       left: 50%;
       transform: translateX(-50%);
       font-size: 72px;
@@ -31,7 +31,7 @@
     /* Container định vị phong thư và nút bấm */
     .container {
       position: absolute;
-      top: 290px;  /* Vị trí container ban đầu */
+      top: 290px;  /* Điều chỉnh vị trí cụ thể theo nhu cầu */
       left: 50%;
       transform: translateX(-50%);
       text-align: center;
@@ -41,9 +41,9 @@
       position: relative;
       width: 300px;
       height: 200px;
-      background: #ffcdd2;
-      border: 2px solid #f06292;
-      border-radius: 20px;
+      background: #ffcdd2;       /* Màu nền hồng nhạt */
+      border: 2px solid #f06292;  /* Viền của phong thư */
+      border-radius: 20px;        /* Bo tròn các góc */
       box-sizing: border-box;
       overflow: hidden;
       z-index: 10;
@@ -55,9 +55,9 @@
       left: 0;
       width: 300px;
       height: 200px;
-      z-index: 2;
-      pointer-events: none;
-      transition: opacity 0.8s;
+      z-index: 2;                 /* Đặt trên lá thư */
+      pointer-events: none;       /* Không can thiệp sự kiện chuột */
+      transition: opacity 0.8s;   /* Hiệu ứng mờ dần khi mở */
     }
     .flap path {
       fill: #f06292;
@@ -80,9 +80,9 @@
       text-align: center;
       padding: 10px;
       box-sizing: border-box;
-      opacity: 0;
+      opacity: 0;                 /* Ẩn lúc đầu */
       transition: transform 0.8s, opacity 0.8s;
-      z-index: 1;
+      z-index: 1;                 /* Nằm dưới flap */
     }
     .letter p {
       margin: 10px 0;
@@ -95,7 +95,7 @@
       transform: translate(-50%, -10px);
     }
     .envelope.open .flap {
-      opacity: 0;
+      opacity: 0; /* Tam giác mờ dần và biến mất */
     }
     /* -------- NÚT BẤM -------- */
     .buttons {
@@ -126,6 +126,7 @@
       overflow: hidden;
       z-index: 999;
     }
+    /* Các trái tim rơi */
     .falling-heart {
       position: absolute;
       opacity: 0.8;
@@ -141,14 +142,12 @@
         opacity: 0;
       }
     }
-    /* CSS Media Query cho màn hình nhỏ */
+    /* Nếu bạn muốn điều chỉnh layout cho màn hình nhỏ, bạn có thể thêm media query.
+       Tuy nhiên, nếu bạn muốn chữ h1 luôn lớn (72px) thì hãy đảm bảo không giảm kích thước trong media query. */
     @media (max-width: 600px) {
-      h1 {
-        font-size: 40px;  /* Giảm kích thước chữ trên điện thoại */
-        top: 30px;        /* Nâng tiêu đề cao hơn so với giao diện điện thoại */
-      }
+      /* Nếu cần, bạn có thể điều chỉnh vị trí container để phù hợp hơn */
       .container {
-        top: 200px;       /* Dịch container xuống để tạo khoảng trống cho tiêu đề */
+        top: 290px;
       }
     }
   </style>
@@ -159,10 +158,12 @@
   <div class="container">
     <!-- Phong thư -->
     <div class="envelope" id="envelope">
-      <!-- SVG tạo tam giác nắp thư: Hai đỉnh tại (0,0) và (300,0), đỉnh dưới tại (150,100) -->
+      <!-- SVG tạo tam giác nắp thư:
+           Hai đỉnh tại (0,0) và (300,0), đỉnh dưới tại (150,100) -->
       <svg viewBox="0 0 300 200" class="flap">
         <path d="M0,0 L300,0 L150,100 Z" />
       </svg>
+
       <!-- Lá thư ẩn bên trong -->
       <div class="letter">
         <p>I love you, most ardently!</p>
@@ -205,17 +206,13 @@
       const duration = Math.random() * 3 + 3;
       heart.style.animationDuration = `${duration}s`;
       heartContainer.appendChild(heart);
-      setTimeout(() => {
-        heart.remove();
-      }, duration * 1000);
+      setTimeout(() => { heart.remove(); }, duration * 1000);
     }
     
     openBtn.addEventListener("click", () => {
       envelope.classList.add("open");
       heartInterval = setInterval(createHeart, 300);
-      setTimeout(() => {
-        clearInterval(heartInterval);
-      }, 5000);
+      setTimeout(() => { clearInterval(heartInterval); }, 5000);
     });
     
     closeBtn.addEventListener("click", () => {
